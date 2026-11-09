@@ -119,7 +119,7 @@ void fila_imprime (struct fila_t *f)
     da funcao, isso impede acesso invalido a memoria*/
     while (aux)
     {
-        printf ("%d", aux->item);
+        printf ("%p", aux->item);
         /*verificação para formatacao da impressao*/
         if (aux->prox)
             printf (" ");

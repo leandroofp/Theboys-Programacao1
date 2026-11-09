@@ -3,24 +3,6 @@
 #include <string.h>
 #include "fprio.h"
 
-
-
-// descreve um nodo da fila de prioridades
-struct fpnodo_t
-{
-  void *item ;          // item associado ao nodo
-  int   tipo ;          // tipo do item
-  int   prio ;          // prioridade do item
-  struct fpnodo_t *prox;    // próximo nodo
-};
-
-// descreve uma fila de prioridades
-struct fprio_t
-{
-  struct fpnodo_t *prim ;   // primeiro nodo da fila
-  int num ;         // número de itens na fila
-} ;
-
 struct fprio_t *fprio_cria ()
 {
   struct fprio_t *fila = malloc (sizeof (struct fprio_t));
@@ -71,13 +53,25 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio)
   novo->prio = prio;
 
 
-  //se a fila é vazia ou a inserção e no inicio, o primeiro sera o novo item
-  if ( f->prim == NULL || f->prim->prio > novo->prio)
+  //se a fila é vazia 
+  if ( f->prim == NULL)
+  {
+    novo->prox = f->prim;
+    f->prim = novo;
+    f->fim = novo;
+  }
+  else if (f->prim->prio > prio)
   {
     novo->prox = f->prim;
     f->prim = novo;
   }
-
+  //se a inserção é no final
+  else if (f->fim->prio <= prio)       
+  {
+    f->fim->prox = novo;
+    f->fim = novo;
+    novo->prox = NULL;
+  }
   //inserção em demais partes da fila
   else
   {
@@ -113,6 +107,9 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio)
   da fila, que sera retirado. item retirado recebe o ponteiro
   que aponta pro item daquele nodo.*/
   f->prim = aux->prox;
+  //caso a fila tenha acabado
+  if (f->prim == NULL)
+    f->fim = NULL;
   *tipo = aux->tipo;
   *prio = aux->prio;
   item_retirado = aux->item;
