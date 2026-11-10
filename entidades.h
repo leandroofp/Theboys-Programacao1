@@ -43,7 +43,7 @@ struct invasao_t
 struct mundo_t
 {
    int Nherois;
-   int herois[NVETOR];
+   int herois[Nherois];
    int Nbase;
    int base[Nbase];
    int Nmissoes;

@@ -60,6 +60,7 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio)
     f->prim = novo;
     f->fim = novo;
   }
+  //se a inserção é no inicio
   else if (f->prim->prio > prio)
   {
     novo->prox = f->prim;
