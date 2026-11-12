@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "entidades.h"
+#include "destruicoes.h"
 
 /*funções auxiliares*/
 
@@ -44,7 +45,7 @@ struct base_t *criabase (int num_base)
     novabase->local.x = aleatorio(0,n_tamanho_mundo - 1);
     novabase->local.y = aleatorio(0,n_tamanho_mundo - 1);
     novabase->lotacao = aleatorio (3,10);
-    novabase->presentes = cjto_cria (novabase->lotacao);
+    novabase->presentes = cjto_cria (n_herois); //todos os herois podem estar nessa base, e seus ids variam de 0 até n_herois
     if (!novabase->presentes)
     {
         free(novabase);
@@ -98,51 +99,64 @@ struct mundo_t *criamundo ()
     if (!mundo)
         return(NULL);
 
+    //inicializações
     mundo->relogio = 0; //tempo inicia em 0
     mundo->tam_mundo.x = n_tamanho_mundo - 1;
     mundo->tam_mundo.y = n_tamanho_mundo -1;
     mundo->qtndhabilidades = n_habilidades;
-
-
-    /*criação dos herois*/
     mundo->qtndherois = 0;
+    mundo->qtndbases = 0;
+    mundo->qtndmissoes = 0;
+    mundo->qtndinvasoes = 0;
+
+
+     /*criação dos herois*/
     for (int i = 0; i<n_herois; i++)
     {
         mundo->herois[i] = criaheroi(mundo->qtndherois);
         if (!mundo->herois[i])
+        {
+            destroimundo(mundo);
             return(NULL);
+        }
         mundo->herois[i]->estado = 1;
         mundo->qtndherois++;
     }
 
     /*criação das bases*/
-    mundo->qtndbases = 0;
       for (int i = 0; i<n_bases; i++)
     {
         mundo->bases[i] = criabase(mundo->qtndbases);
         if (!mundo->bases[i])
+        {
+            destroimundo(mundo);
             return(NULL);
+        }
         mundo->bases[i]->estado = 1;
         mundo->qtndbases++;
     }
 
     /*cria missoes*/
-     mundo->qtndmissoes = 0;
       for (int i = 0; i<n_missoes; i++)
     {
         mundo->missoes[i] = criamissao(mundo->qtndmissoes);
         if (!mundo->missoes[i])
+        {
+            destroimundo(mundo);
             return(NULL);
+        }
         mundo->qtndmissoes++;
     }
 
     /*cria invasoes*/
-     mundo->qtndinvasoes = 0;
       for (int i = 0; i<n_invasoes; i++)
     {
         mundo->invasoes[i] = criainvasao(mundo->qtndinvasoes);
         if (!mundo->invasoes[i])
+        {
+            destroimundo(mundo);
             return(NULL);
+        } 
         mundo->qtndinvasoes++;
     }
     
