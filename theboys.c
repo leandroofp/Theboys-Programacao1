@@ -12,7 +12,7 @@
 // minimize o uso de variáveis globais
  
 // programa principal
-void main ()
+int main ()
 {
   
   srand (0) ;
@@ -20,7 +20,7 @@ void main ()
   // iniciar o mundo
   struct mundo_t *mundo = criamundo () ;
   if (!mundo)
-    return;
+    return (0);
  
   // executar o laço de simulação
   simulamundo (mundo) ;
@@ -28,5 +28,5 @@ void main ()
   // destruir o mundo
   destroimundo (mundo) ;
  
-  return (0) ;
+  return (1);
 }

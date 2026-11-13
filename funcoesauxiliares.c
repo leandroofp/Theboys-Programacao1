@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "funcoesauxiliares.h"
 #include "fprio.h"
+#include "eventos.h"
+#include "entidades.h"
 
 int aleatorio(int min, int max)
 {
@@ -10,6 +12,7 @@ int aleatorio(int min, int max)
 }
 
 int insere_lef (struct mundo_t *mundo, int tipo, int tempo, int heroi, int base, int missao, int invasao)
+{
     struct evento_t *ev = malloc (sizeof (struct evento_t));
     if (!ev)
         return (0);

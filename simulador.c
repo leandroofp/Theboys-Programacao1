@@ -6,7 +6,7 @@
 
 void simulamundo(struct mundo_t *mundo)
 {
-    struct evento_t *ev = malloc (sizeof(evento_t));
+    struct evento_t *ev = malloc (sizeof(struct evento_t));
     if (!ev)
         return;
     int final = 0; 

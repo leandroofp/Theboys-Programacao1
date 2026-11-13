@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "entidades.h"
 #include "destruicoes.h"
+#include "fprio.h"
 
 void destroiheroi (struct heroi_t *heroi)
 {
