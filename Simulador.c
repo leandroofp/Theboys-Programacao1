@@ -1,18 +1,26 @@
+#include <stdlib.h>
 #include "entidades.h"
 #include "eventos.h"
 #include "fprio.h"
 
+
 void simulamundo(struct mundo_t *mundo)
 {
-    struct evento_t *ev;
-    int fim = 0;
+    struct evento_t *ev = malloc (sizeof(evento_t));
+    if (!ev)
+        return;
+    int final = 0; 
+    int tempo, tipo;
+
     eventosiniciais(mundo);
 
-    while (!fim)
+    while (!final)
     {
-        ev = fprio_retira(mundo->lef; ev.id; ev.tempo);
-        mundo->relogio = ev.tempo;
-        switch (ev.id)
+        ev = fprio_retira(mundo->lef, &tipo, &tempo);
+        if (!ev)
+            return;
+        mundo->relogio = tempo;
+        switch (tipo)
         {
             case 1:
                 chega();
@@ -64,10 +72,10 @@ void simulamundo(struct mundo_t *mundo)
 
             case 13:
                 fim();
-                fim = 1;
+                final = 1;
                 break;
 
         }
-
+    free (ev);
     }
 }

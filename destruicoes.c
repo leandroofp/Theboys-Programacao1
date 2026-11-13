@@ -14,7 +14,7 @@ void destroibase (struct base_t *base)
 {
     if (!base)
         return;
-    cjto_destroi(base->presentes);
+    while (fila_retira(base->espera));
     fila_destroi(base->espera);     
     free(base);
 }
@@ -45,6 +45,8 @@ void destroimundo (struct mundo_t *mundo)
         destroimissao(mundo->missoes[i]);
     for (int i = 0; i < mundo->qtndinvasoes; i++)
         destroiinvasao(mundo->invasoes[i]);
+
+    fprio_destroi (mundo->lef);
 
     free(mundo);
 }

@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include "entidades.h"
 #include "destruicoes.h"
-
+#include "funcoesauxiliares.h"
+#include "fprio.h"
 
 struct heroi_t *criaheroi (int num_heroi)
 {
@@ -100,6 +101,7 @@ struct mundo_t *criamundo ()
     mundo->qtndbases = 0;
     mundo->qtndmissoes = 0;
     mundo->qtndinvasoes = 0;
+    mundo->lef = NULL;
 
 
      /*criação dos herois*/
@@ -155,7 +157,7 @@ struct mundo_t *criamundo ()
     mundo->lef = fprio_cria();
     if (!mundo->lef)
     {
-        destroimundo();
+        destroimundo(mundo);
         return (NULL);
     }
 

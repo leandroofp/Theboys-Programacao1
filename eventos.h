@@ -1,8 +1,10 @@
 #ifndef eventos_h
 #define eventos_h
+#include "entidades.h"
 
 struct evento_t {
     int id; //identificacao de cada tipo de evento
+    int tempo; //quanto tempo é o do ev
     int heroi; //identifica qual heroi esta realizando esse evento
     int base; //identifica em qual base esse evento acontece
     int missao; //identifica qual missao sera feita, caso seja evento missao
