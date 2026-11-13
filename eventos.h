@@ -11,4 +11,30 @@ struct evento_t {
 
 void eventosiniciais(struct mundo_t *mundo);
 
+void chega();
+
+void espera();
+
+void desiste();
+
+void avisa();
+
+void entra();
+
+void sai();
+
+void viaja();
+
+void morre();
+
+void missao();
+
+void invade();
+
+void recupera_heroi();
+
+void reconstroi_base ();
+
+void fim();
+
 #endif

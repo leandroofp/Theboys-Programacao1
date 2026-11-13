@@ -2,14 +2,6 @@
 #include "entidades.h"
 #include "destruicoes.h"
 
-/*funções auxiliares*/
-
-int aleatorio(int min, int max)
-{
-    return (rand()%(max-min+1)+min);
-}
-
-/*funções do header*/
 
 struct heroi_t *criaheroi (int num_heroi)
 {
@@ -160,6 +152,13 @@ struct mundo_t *criamundo ()
         mundo->qtndinvasoes++;
     }
     
+    mundo->lef = fprio_cria();
+    if (!mundo->lef)
+    {
+        destroimundo();
+        return (NULL);
+    }
+
     return (mundo);
 
 }

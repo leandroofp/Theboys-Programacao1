@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include "entidades.h"
 #include "funcoesauxiliares.h"
 #include "fprio.h"
+#include "eventos.h"
 
 /*ARRUMAR FORMATACAO E DESTRUI CASO FPRIOINSERE*/
 void eventosiniciais(struct mundo_t *mundo)
@@ -21,11 +23,11 @@ void eventosiniciais(struct mundo_t *mundo)
         ev.heroi = mundo->herois[i]; //recebe id do heroi q chegara a base
         mundo->herois[i].base = aleatorio(0, n_bases - 1); //na struct heroi, define em qual base chegara
         ev.base = mundo->herois[i]->base; //recebe id da base q chegara
-        tempo = aleatorio (0,4320);
+        ev.tempo = aleatorio (0,4320);
         ev.id = 1; //chega
 
        //insere na lef o evento chega
-        if (fprio_insere(mundo->lef; ev; &ev.id; tempo) == -1)
+        if (fprio_insere(mundo->lef; ev; &ev.id; ev.tempo) == -1)
         { 
             destroimundo();
             return;
@@ -36,9 +38,9 @@ void eventosiniciais(struct mundo_t *mundo)
   /*missoes sao agendadas durante toda simulacao*/
     for (int i = 0; i<n_missoes; i++)
     {
-        tempo = aleatorio (0, t_fim_do_mundo);
+        ev.tempo = aleatorio (0, t_fim_do_mundo);
         ev.id = 9; //missao
-        if (fprio_insere(mundo->lef; ev; &ev.id; tempo) == -1)
+        if (fprio_insere(mundo->lef; ev; &ev.id; ev.tempo) == -1)
         { 
             destroimundo();
             return;
@@ -48,20 +50,85 @@ void eventosiniciais(struct mundo_t *mundo)
   /*invasoes sao agendadas para após os 3 dias iniciais*/
     for (int i = 0; i<n_invasoes; i++)
     {
-        tempo = aleatorio (4321, t_fim_do_mundo);
+        ev.tempo = aleatorio (4321, t_fim_do_mundo);
         ev.id = 10; //invade
-        if (fprio_insere(mundo->lef; ev; ev.id; tempo) == -1)
+        if (fprio_insere(mundo->lef; ev; ev.id; ev.tempo) == -1)
         {
             destroimundo();
             return;
         }
     }
 
-    tempo = t_fim_do_mundo;
+    ev.tempo = t_fim_do_mundo;
     ev.id = 13; //fim;
-    if (fprio_insere(mundo->lef; ev; ev.id; tempo) == -1)
+    if (fprio_insere(mundo->lef; ev; ev.id; ev.tempo) == -1)
     {
         destroimundo();
         return;
     }
+}
+
+void chega()
+{
+    printf("CHEGA");
+}
+
+void espera()
+{
+    printf("ESPERA");
+}
+
+void desiste()
+{
+    printf("DESISTE");
+}
+
+void avisa()
+{
+    printf("AVISA");
+}
+
+void entra()
+{
+    printf("ENTRA");
+}
+
+void sai()
+{
+    printf("SAI");
+}
+
+void viaja()
+{
+    printf("VIAJA");
+}
+
+void morre()
+{
+    printf("MORRE");
+}
+
+void missao()
+{
+    printf("MISSAO");
+}
+
+void invade()
+{
+    printf("INVADE");
+}
+
+void recupera_heroi()
+{
+    printf("RECUPERA HEROI");
+}
+
+void reconstroi_base()
+{
+    printf("RECONSTROI BASE");
+}
+
+void fim()
+{
+    printf("FIM");
 }

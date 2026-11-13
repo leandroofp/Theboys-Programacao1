@@ -63,6 +63,7 @@ struct mundo_t
    int qtndhabilidades;
    struct posicao_t tam_mundo;
    int relogio;
+   struct fprio_t *lef; //lista de eventos futuros
 };
 
 /*função responsável por inicializar o herói.
