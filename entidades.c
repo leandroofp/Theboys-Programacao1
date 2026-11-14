@@ -79,8 +79,7 @@ struct invasao_t *criainvasao(int num_invasao)
     if (!novainvasao)
         return (NULL);
     novainvasao->id = num_invasao;
-    novainvasao->local.x = aleatorio(0,n_bases - 1);
-    novainvasao->local.y = aleatorio(0,n_bases - 1);
+    novainvasao->local = aleatorio(0,n_bases - 1);
     novainvasao->tpheroi = aleatorio(0,4320);
     novainvasao->tpbase = aleatorio (0,7200);
     return (novainvasao);

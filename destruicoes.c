@@ -15,11 +15,12 @@ void destroibase (struct base_t *base)
 {
     if (!base)
         return;
-    while (fila_retira(base->espera));
-    fila_destroi(base->espera);     
-    free(base);
-}
 
+    cjto_destroi (base->presentes);     // libera o conjunto
+    while (fila_retira (base->espera)); // esvazia a fila sem liberar os itens, se nao, o mesmo heroi seria liberado duas vezes em destroi mundo
+    fila_destroi (base->espera);        // agora libera só a estrutura da fila
+    free (base);
+}
 void destroimissao (struct missao_t *missao)
 {
     if (!missao)

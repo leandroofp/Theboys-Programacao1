@@ -2,13 +2,12 @@
 #include "entidades.h"
 #include "eventos.h"
 #include "fprio.h"
+#include "simulador.h"
 
 
 void simulamundo(struct mundo_t *mundo)
 {
-    struct evento_t *ev = malloc (sizeof(struct evento_t));
-    if (!ev)
-        return;
+    struct evento_t *ev;
     int final = 0; 
     int tempo, tipo;
 

@@ -46,7 +46,7 @@ struct missao_t
 struct invasao_t
 {
     int id;
-    struct posicao_t local;
+    int local;
     int tpbase; //tempo de penalidade depois da base ser destruida
     int tpheroi; //tempo de penalidade depois da heroi ser destruida
 };
