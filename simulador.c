@@ -11,7 +11,8 @@ void simulamundo(struct mundo_t *mundo)
     int final = 0; 
     int tempo, tipo;
 
-    eventosiniciais(mundo);
+    if (!eventosiniciais(mundo))
+        return;
 
     while (!final)
     {
@@ -22,55 +23,55 @@ void simulamundo(struct mundo_t *mundo)
         switch (tipo)
         {
             case 1:
-                chega();
+                chega(mundo,ev);
                 break;
 
             case 2:
-                espera();
+                espera(mundo,ev);
                 break;
 
             case 3:
-                desiste();
+                desiste(mundo,ev);
                 break;
 
             case 4:
-                avisa();
+                avisa(mundo,ev);
                 break;
             
             case 5:
-                entra();
+                entra(mundo,ev);
                 break;
             
             case 6:
-                sai();
+                sai(mundo,ev);
                 break;
             
             case 7:
-                viaja();
+                viaja(mundo,ev);
                 break;
 
             case 8:
-                morre();
+                morre(mundo,ev);
                 break;
 
             case 9:
-                missao();
+                missao(mundo,ev);
                 break;
 
             case 10:
-                invade();
+                invade(mundo,ev);
                 break;
 
             case 11:
-                recupera_heroi();
+                recupera_heroi(mundo,ev);
                 break;
 
             case 12:
-                reconstroi_base();
+                reconstroi_base(mundo,ev);
                 break;
 
             case 13:
-                fim();
+                fim(mundo);
                 final = 1;
                 break;
 

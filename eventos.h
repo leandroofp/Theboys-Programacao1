@@ -10,32 +10,32 @@ struct evento_t {
     int invasao; //identifica qual invasao feita, caso evento seja invasao
 };
 
-void eventosiniciais(struct mundo_t *mundo);
+int eventosiniciais(struct mundo_t *mundo);
 
-void chega();
+void chega (struct mundo_t *mundo, struct evento_t *ev);
 
-void espera();
+void espera (struct mundo_t *mundo, struct evento_t *ev);
 
-void desiste();
+void desiste (struct mundo_t *mundo, struct evento_t *ev);
 
-void avisa();
+void avisa (struct mundo_t *mundo, struct evento_t *ev);
 
-void entra();
+void entra (struct mundo_t *mundo, struct evento_t *ev);
 
-void sai();
+void sai (struct mundo_t *mundo, struct evento_t *ev);
 
-void viaja();
+void viaja (struct mundo_t *mundo, struct evento_t *ev);
 
-void morre();
+void morre (struct mundo_t *mundo, struct evento_t *ev);
 
-void missao();
+void missao (struct mundo_t *mundo, struct evento_t *ev);
 
-void invade();
+void invade (struct mundo_t *mundo, struct evento_t *ev);
 
-void recupera_heroi();
+void recupera_heroi (struct mundo_t *mundo, struct evento_t *ev);
 
-void reconstroi_base ();
+void reconstroi_base (struct mundo_t *mundo, struct evento_t *ev);
 
-void fim();
+void fim (struct mundo_t *mundo);
 
 #endif
