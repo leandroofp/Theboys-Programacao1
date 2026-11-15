@@ -38,6 +38,8 @@ struct base_t *criabase (int num_base)
     novabase->local.x = aleatorio(0,n_tamanho_mundo - 1);
     novabase->local.y = aleatorio(0,n_tamanho_mundo - 1);
     novabase->lotacao = aleatorio (3,10);
+    novabase->fila_max = 0;
+    novabase->missoes = 0;
     novabase->presentes = cjto_cria (n_herois); //todos os herois podem estar nessa base, e seus ids variam de 0 até n_herois
     if (!novabase->presentes)
     {
@@ -70,6 +72,7 @@ struct missao_t *criamissao (int num_missao)
         return (NULL);
     }
     novamissao->perigo = aleatorio (0,100);
+    novamissao->tentativas = 0;
     return (novamissao);
 }
 
@@ -101,6 +104,10 @@ struct mundo_t *criamundo ()
     mundo->qtndmissoes = 0;
     mundo->qtndinvasoes = 0;
     mundo->lef = NULL;
+    mundo->eventos_tratados = 0;
+    mundo->missoes_cumpridas = 0;
+    mundo->invasoes_realizadas = 0;
+    mundo->mortes = 0;
 
 
      /*criação dos herois*/

@@ -20,6 +20,7 @@ void simulamundo(struct mundo_t *mundo)
         if (!ev)
             return;
         mundo->relogio = tempo;
+        mundo->eventos_tratados++;
         switch (tipo)
         {
             case 1:

@@ -20,7 +20,7 @@ int main ()
   // iniciar o mundo
   struct mundo_t *mundo = criamundo () ;
   if (!mundo)
-    return (0);
+    return (1);
  
   // executar o laço de simulação
   simulamundo (mundo) ;
@@ -28,5 +28,5 @@ int main ()
   // destruir o mundo
   destroimundo (mundo) ;
  
-  return (1);
+  return (0);
 }

@@ -5,7 +5,7 @@
 #include "fprio.h"
 #include "destruicoes.h"
 #include "eventos.h"
-#include "conjuntos.h"
+#include "conjunto.h"
 
 
 int eventosiniciais (struct mundo_t *mundo)
@@ -25,10 +25,13 @@ int eventosiniciais (struct mundo_t *mundo)
             return (0);
 
     /* invasoes depois dos 3 dias iniciais */
-      int baseinvadida = mundo->invasoes[i]->base;
+    int baseinvadida;
     for (int i = 0; i < n_invasoes; i++)
+    {
+        baseinvadida = mundo->invasoes[i]->base;;
         if (!insere_lef (mundo, 10, aleatorio (4321, t_fim_do_mundo), 0, baseinvadida, 0, i))
             return (0);
+    }
 
     /* fim do mundo */
     if (!insere_lef (mundo, 13, t_fim_do_mundo, 0, 0, 0, 0))
@@ -78,6 +81,8 @@ void espera (struct mundo_t *mundo, struct evento_t *ev)
 
     /*a fila guarda o ponteiro do heroi*/
     fila_insere (base->espera, heroi);
+    if (fila_tamanho (base->espera) > base->fila_max)
+        base->fila_max = fila_tamanho (base->espera);
     insere_lef (mundo, 4, agora, 0, base->id, 0, 0);
 }
 
@@ -163,6 +168,7 @@ void morre (struct mundo_t *mundo, struct evento_t *ev)
 
     cjto_retira (base->presentes, heroi->id);
     heroi->estado = 0;
+    mundo->mortes++;
 
     /*morto nao tem mais eventos: isso inclui o recupera_heroi, entao ele nunca volta a ficar ativo*/
     remove_lef (mundo, 0, heroi->id);
@@ -182,11 +188,13 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
     int visitada[n_bases];
     int escolhida = -1;
     int prox;
-    double risco;
+    int risco;
 
-    printf ("%6d: MISSAO %d HAB REQ: ", agora, miss->id);
+    miss->tentativas++;
+    printf ("%6d: MISSAO %d TENT %d HAB REQ: ", agora, miss->id, miss->tentativas);
+    printf ("[ ");
     cjto_imprime (miss->habilidades);
-    printf ("\n");
+    printf (" ]\n");
 
     for (int i = 0; i < n_bases; i++)
     {
@@ -223,8 +231,9 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
                 continue;
             heroi = mundo->herois[id];
             printf ("%6d: MISSAO %d HAB HEROI %2d: ", agora, miss->id, id);
+            printf ("[ ");
             cjto_imprime (heroi->habilidades);
-            printf ("\n");
+             printf (" ]\n");
 
             /*so herois ativos entram na uniao*/
             if (heroi->estado)
@@ -239,8 +248,9 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
         }
 
         printf ("%6d: MISSAO %d UNIAO HAB BASE %d: ", agora, miss->id, base->id);
+        printf ("[");
         cjto_imprime (uniao);
-        printf ("\n");
+        printf ("]\n");
 
         if (cjto_contem (uniao, miss->habilidades) == 1)
         {
@@ -254,10 +264,13 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
     if (escolhida >= 0)
     {
         base = mundo->bases[escolhida];
+        mundo->missoes_cumpridas++;
+        base->missoes++;
 
         printf ("%6d: MISSAO %d CUMPRIDA BASE %d HABS: ", agora, miss->id, base->id);
+        printf ("[");
         cjto_imprime (uniaoescolhida);
-        printf ("\n");
+        printf ("]\n");
         cjto_destroi (uniaoescolhida);
 
         for (int id = 0; id < n_herois; id++)
@@ -293,6 +306,8 @@ void invade (struct mundo_t *mundo, struct evento_t *ev)
     /*invasao em base inativa e ignorada*/
     if (!base->estado)
         return;
+    
+    mundo->invasoes_realizadas++;
 
     printf ("%6d: INVADE   BASE %d   INVADE %d\n", agora, base->id, invasao->id);
     printf ("%6d: INVADE %d BASE %d HEROIS INATIVOS [", agora, invasao->id, base->id);
@@ -334,17 +349,54 @@ void reconstroi_base (struct mundo_t *mundo, struct evento_t *ev)
 void fim (struct mundo_t *mundo)
 {
     struct heroi_t *heroi;
+    struct base_t *base;
+    int min = 0;
+    int max = 0;
+    int soma = 0;
+    int tentadas = 0;
+    int t;
 
     printf ("%6d: FIM\n\n", mundo->relogio);
 
-    /*falta o resto do relatorio: bases, missoes, invasoes (precisam de contadores)*/
     for (int i = 0; i < n_herois; i++)
     {
         heroi = mundo->herois[i];
-        printf ("HEROI %2d %s PAC %3d VEL %4d EXP %4d HABS ",
+        printf ("HEROI %2d %s PAC %3d VEL %4d EXP %4d HABS [ ",
                 heroi->id, heroi->estado ? "VIVO " : "MORTO", heroi->paciencia,
                 heroi->velocidade, heroi->exp);
         cjto_imprime (heroi->habilidades);
-        printf ("\n");
+        printf (" ]\n");
     }
+    printf ("\n");
+
+    for (int i = 0; i < n_bases; i++)
+    {
+        base = mundo->bases[i];
+        printf ("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n",
+                base->id, base->lotacao, base->fila_max, base->missoes);
+    }
+    printf ("\n");
+
+    /*so entram na conta as missoes que foram tentadas pelo menos uma vez*/
+    for (int i = 0; i < n_missoes; i++)
+    {
+        t = mundo->missoes[i]->tentativas;
+        if (!t)
+            continue;
+        if (!tentadas || t < min)
+            min = t;
+        if (t > max)
+            max = t;
+        soma += t;
+        tentadas++;
+    }
+
+    printf ("EVENTOS TRATADOS: %d\n", mundo->eventos_tratados);
+    printf ("MISSOES CUMPRIDAS: %d/%d (%.1f%%)\n", mundo->missoes_cumpridas,
+            n_missoes, 100.0 * mundo->missoes_cumpridas / n_missoes);
+    printf ("INVASÕES REALIZADAS: %d/%d (%.1f%%)\n", mundo->invasoes_realizadas,
+            n_invasoes, 100.0 * mundo->invasoes_realizadas / n_invasoes);
+    printf ("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min, max,
+            tentadas ? (double) soma / tentadas : 0.0);
+    printf ("TAXA MORTALIDADE: %.1f%%\n", 100.0 * mundo->mortes / n_herois);
 }

@@ -35,6 +35,8 @@ struct base_t
     int estado;
     struct fila_t *espera;
     struct posicao_t local;
+    int fila_max; //maior tamanho que a fila de espera ja teve
+    int missoes; //quantas missoes foram cumpridas por esta base
 };
 struct missao_t 
 {
@@ -42,6 +44,7 @@ struct missao_t
     struct cjto_t *habilidades;
     int perigo;
     struct posicao_t local;
+    int tentativas; //quantas vezes essa missao foi tentada
 };
 struct invasao_t
 {
@@ -64,6 +67,10 @@ struct mundo_t
    struct posicao_t tam_mundo;
    int relogio;
    struct fprio_t *lef; //lista de eventos futuros
+   int eventos_tratados;
+    int missoes_cumpridas;
+    int invasoes_realizadas;
+    int mortes;
 };
 
 /*função responsável por inicializar o herói.
