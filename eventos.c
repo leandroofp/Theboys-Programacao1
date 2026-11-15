@@ -28,7 +28,7 @@ int eventosiniciais (struct mundo_t *mundo)
     int baseinvadida;
     for (int i = 0; i < n_invasoes; i++)
     {
-        baseinvadida = mundo->invasoes[i]->base;;
+        baseinvadida = mundo->invasoes[i]->local;
         if (!insere_lef (mundo, 10, aleatorio (4321, t_fim_do_mundo), 0, baseinvadida, 0, i))
             return (0);
     }
