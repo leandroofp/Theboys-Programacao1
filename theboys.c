@@ -15,7 +15,7 @@
 int main ()
 {
   
-  srand (0) ;
+  srand (time(NULL)) ;
  
   // iniciar o mundo
   struct mundo_t *mundo = criamundo () ;
