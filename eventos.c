@@ -1,3 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "entidades.h"
+#include "funcoesauxiliares.h"
+#include "fprio.h"
+#include "destruicoes.h"
+#include "eventos.h"
+#include "conjunto.h"
+
+
 /* Agenda os eventos que dão início à simulação */
 int eventosiniciais (struct mundo_t *mundo)
 {
@@ -188,7 +198,6 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
     struct base_t *base;
     struct cjto_t *uniao;
     struct cjto_t *aux;
-    struct cjto_t *uniaoescolhida = NULL;
     int tempoatual = mundo->relogio;
     int dist[n_bases];       /* distancia de cada base ate o local da missao */
     int visitada[n_bases];   /* marca as bases ja analisadas */
@@ -346,7 +355,7 @@ void invade (struct mundo_t *mundo, struct evento_t *ev)
 
     /* base inativa e agenda a reconstrucao (12) */
     base->estado = 0;
-    insere_lef (mundo, 12, tempoatual + invasao->tpermanenciaase, -1, base->id, 0, 0);
+    insere_lef (mundo, 12, tempoatual + invasao->tpbase, -1, base->id, 0, 0);
     printf ("%6d: INVADE %d BASE %d INATIVA\n", tempoatual, invasao->id, base->id);
 }
 
