@@ -44,7 +44,7 @@ void chega (struct mundo_t *mundo, struct evento_t *ev)
 {
     struct heroi_t *heroi = mundo->herois[ev->heroi];
     struct base_t *base = mundo->bases[ev->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int presentes = cjto_card (base->presentes);
     int tamfila = fila_tamanho (base->espera);
     int espera;
@@ -59,14 +59,14 @@ void chega (struct mundo_t *mundo, struct evento_t *ev)
     if (espera && base->estado)
     {
         printf ("%6d: CHEGA  HEROI %2d BASE %d (%2d/%2d) ESPERA\n",
-                agora, heroi->id, base->id, presentes, base->lotacao);
-        insere_lef (mundo, 2, agora, heroi->id, base->id, 0, 0);
+             tempoatual, heroi->id, base->id, presentes, base->lotacao);
+        insere_lef (mundo, 2, tempoatual, heroi->id, base->id, 0, 0);
     }
     else
     {
         printf ("%6d: CHEGA  HEROI %2d BASE %d (%2d/%2d) DESISTE\n",
-                agora, heroi->id, base->id, presentes, base->lotacao);
-        insere_lef (mundo, 3, agora, heroi->id, base->id, 0, 0);
+             tempoatual, heroi->id, base->id, presentes, base->lotacao);
+        insere_lef (mundo, 3, tempoatual, heroi->id, base->id, 0, 0);
     }
 }
 
@@ -74,25 +74,25 @@ void espera (struct mundo_t *mundo, struct evento_t *ev)
 {
     struct heroi_t *heroi = mundo->herois[ev->heroi];
     struct base_t *base = mundo->bases[ev->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
 
     printf ("%6d: ESPERA HEROI %2d BASE %d (%2d)\n",
-            agora, heroi->id, base->id, fila_tamanho (base->espera));
+         tempoatual, heroi->id, base->id, fila_tamanho (base->espera));
 
     /*a fila guarda o ponteiro do heroi*/
     fila_insere (base->espera, heroi);
     if (fila_tamanho (base->espera) > base->fila_max)
         base->fila_max = fila_tamanho (base->espera);
-    insere_lef (mundo, 4, agora, 0, base->id, 0, 0);
+    insere_lef (mundo, 4, tempoatual, 0, base->id, 0, 0);
 }
 
 void desiste (struct mundo_t *mundo, struct evento_t *ev)
 {
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int destino = aleatorio (0, n_bases - 1);
 
-    printf ("%6d: DESIST HEROI %2d BASE %d\n", agora, ev->heroi, ev->base);
-    insere_lef (mundo, 7, agora, ev->heroi, destino, 0, 0);
+    printf ("%6d: DESIST HEROI %2d BASE %d\n", tempoatual, ev->heroi, ev->base);
+    insere_lef (mundo, 7, tempoatual, ev->heroi, destino, 0, 0);
 }
 
 void avisa (struct mundo_t *mundo, struct evento_t *ev)
@@ -100,10 +100,10 @@ void avisa (struct mundo_t *mundo, struct evento_t *ev)
     struct base_t *base = mundo->bases[ev->base];
     struct fila_nodo_t *nodo;
     struct heroi_t *heroi;
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
 
     printf ("%6d: AVISA  PORTEIRO BASE %d (%2d/%2d) FILA [",
-            agora, base->id, cjto_card (base->presentes), base->lotacao);
+         tempoatual, base->id, cjto_card (base->presentes), base->lotacao);
     for (nodo = base->espera->prim; nodo; nodo = nodo->prox)
         printf (" %2d", ((struct heroi_t *) nodo->item)->id);
     printf (" ]\n");
@@ -112,8 +112,8 @@ void avisa (struct mundo_t *mundo, struct evento_t *ev)
     {
         heroi = fila_retira (base->espera);
         cjto_insere (base->presentes, heroi->id);
-        printf ("%6d: AVISA  PORTEIRO BASE %d ADMITE %2d\n", agora, base->id, heroi->id);
-        insere_lef (mundo, 5, agora, heroi->id, base->id, 0, 0);
+        printf ("%6d: AVISA  PORTEIRO BASE %d ADMITE %2d\n", tempoatual, base->id, heroi->id);
+        insere_lef (mundo, 5, tempoatual, heroi->id, base->id, 0, 0);
     }
 }
 
@@ -121,27 +121,27 @@ void entra (struct mundo_t *mundo, struct evento_t *ev)
 {
     struct heroi_t *heroi = mundo->herois[ev->heroi];
     struct base_t *base = mundo->bases[ev->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int tpb = 15 + heroi->paciencia * aleatorio (1, 20);
 
     printf ("%6d: ENTRA  HEROI %2d BASE %d (%2d/%2d) SAI %d\n",
-            agora, heroi->id, base->id, cjto_card (base->presentes), base->lotacao, agora + tpb);
-    insere_lef (mundo, 6, agora + tpb, heroi->id, base->id, 0, 0);
+         tempoatual, heroi->id, base->id, cjto_card (base->presentes), base->lotacao, tempoatual + tpb);
+    insere_lef (mundo, 6, tempoatual + tpb, heroi->id, base->id, 0, 0);
 }
 
 void sai (struct mundo_t *mundo, struct evento_t *ev)
 {
     struct base_t *base = mundo->bases[ev->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int destino = aleatorio (0, n_bases - 1);
 
     cjto_retira (base->presentes, ev->heroi);
 
     printf ("%6d: SAI    HEROI %2d BASE %d (%2d/%2d)\n",
-            agora, ev->heroi, base->id, cjto_card (base->presentes), base->lotacao);
+         tempoatual, ev->heroi, base->id, cjto_card (base->presentes), base->lotacao);
 
-    insere_lef (mundo, 7, agora, ev->heroi, destino, 0, 0);
-    insere_lef (mundo, 4, agora, 0, base->id, 0, 0);
+    insere_lef (mundo, 7, tempoatual, ev->heroi, destino, 0, 0);
+    insere_lef (mundo, 4, tempoatual, 0, base->id, 0, 0);
 }
 
 void viaja (struct mundo_t *mundo, struct evento_t *ev)
@@ -149,22 +149,22 @@ void viaja (struct mundo_t *mundo, struct evento_t *ev)
     struct heroi_t *heroi = mundo->herois[ev->heroi];
     struct base_t *origem = mundo->bases[heroi->base];
     struct base_t *destino = mundo->bases[ev->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int dist = distancia (origem->local, destino->local);
     int duracao = dist / heroi->velocidade;
 
     printf ("%6d: VIAJA  HEROI %2d BASE %d BASE %d DIST %d VEL %d CHEGA %d\n",
-            agora, heroi->id, origem->id, destino->id, dist, heroi->velocidade, agora + duracao);
-    insere_lef (mundo, 1, agora + duracao, heroi->id, destino->id, 0, 0);
+         tempoatual, heroi->id, origem->id, destino->id, dist, heroi->velocidade, tempoatual + duracao);
+    insere_lef (mundo, 1, tempoatual + duracao, heroi->id, destino->id, 0, 0);
 }
 
 void morre (struct mundo_t *mundo, struct evento_t *ev)
 {
     struct heroi_t *heroi = mundo->herois[ev->heroi];
     struct base_t *base = mundo->bases[heroi->base];
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
 
-    printf ("%6d: MORRE  HEROI %2d MISSAO %d\n", agora, heroi->id, ev->missao);
+    printf ("%6d: MORRE  HEROI %2d missAO %d\n", tempoatual, heroi->id, ev->missao);
 
     cjto_retira (base->presentes, heroi->id);
     heroi->estado = 0;
@@ -172,33 +172,33 @@ void morre (struct mundo_t *mundo, struct evento_t *ev)
 
     /*morto nao tem mais eventos: isso inclui o recupera_heroi, entao ele nunca volta a ficar ativo*/
     remove_lef (mundo, 0, heroi->id);
-    insere_lef (mundo, 4, agora, 0, base->id, 0, 0);
+    insere_lef (mundo, 4, tempoatual, 0, base->id, 0, 0);
 }
 
 void missao (struct mundo_t *mundo, struct evento_t *ev)
 {
-    struct missao_t *miss = mundo->missoes[ev->missao];
+    struct missao_t *missao = mundo->missoes[ev->missao];
     struct heroi_t *heroi;
     struct base_t *base;
     struct cjto_t *uniao;
     struct cjto_t *aux;
     struct cjto_t *uniaoescolhida = NULL;
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int dist[n_bases];
     int visitada[n_bases];
     int escolhida = -1;
     int prox;
     int risco;
 
-    miss->tentativas++;
-    printf ("%6d: MISSAO %d TENT %d HAB REQ: ", agora, miss->id, miss->tentativas);
+    missao->tentativas++;
+    printf ("%6d: MISSAO %d TENT %d HAB REQ: ", tempoatual, missao->id, missao->tentativas);
     printf ("[ ");
-    cjto_imprime (miss->habilidades);
+    cjto_imprime (missao->habilidades);
     printf (" ]\n");
 
     for (int i = 0; i < n_bases; i++)
     {
-        dist[i] = distancia (mundo->bases[i]->local, miss->local);
+        dist[i] = distancia (mundo->bases[i]->local, missao->local);
         visitada[i] = 0;
     }
 
@@ -215,22 +215,22 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
         if (!base->estado)
             continue;
 
-        printf ("%6d: MISSAO %d BASE %d DIST %d HEROIS [", agora, miss->id, base->id, dist[prox]);
+        printf ("%6d: MISSAO %d BASE %d DIST %d HEROIS [", tempoatual, missao->id, base->id, dist[prox]);
         for (int id = 0; id < n_herois; id++)
             if (cjto_pertence (base->presentes, id) == 1)
                 printf (" %d", id);
-        printf (" ]\n");
+        printf ("\n");
 
         uniao = cjto_cria (n_habilidades);
         if (!uniao)
-            continue;
+            return;
 
         for (int id = 0; id < n_herois; id++)
         {
             if (cjto_pertence (base->presentes, id) != 1)
                 continue;
             heroi = mundo->herois[id];
-            printf ("%6d: MISSAO %d HAB HEROI %2d: ", agora, miss->id, id);
+            printf ("%6d: MISSAO %d HAB HEROI %2d: ", tempoatual, missao->id, id);
             printf ("[ ");
             cjto_imprime (heroi->habilidades);
              printf (" ]\n");
@@ -247,12 +247,12 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
             }
         }
 
-        printf ("%6d: MISSAO %d UNIAO HAB BASE %d: ", agora, miss->id, base->id);
+        printf ("%6d: MISSAO %d UNIAO HAB BASE %d: ", tempoatual, missao->id, base->id);
         printf ("[");
         cjto_imprime (uniao);
         printf ("]\n");
 
-        if (cjto_contem (uniao, miss->habilidades) == 1)
+        if (cjto_contem (uniao, missao->habilidades) == 1)
         {
             escolhida = prox;
             uniaoescolhida = uniao;
@@ -267,7 +267,7 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
         mundo->missoes_cumpridas++;
         base->missoes++;
 
-        printf ("%6d: MISSAO %d CUMPRIDA BASE %d HABS: ", agora, miss->id, base->id);
+        printf ("%6d: MISSAO %d CUMPRIDA BASE %d HABS: ", tempoatual, missao->id, base->id);
         printf ("[");
         cjto_imprime (uniaoescolhida);
         printf ("]\n");
@@ -281,17 +281,17 @@ void missao (struct mundo_t *mundo, struct evento_t *ev)
             if (!heroi->estado)
                 continue;
 
-            risco = (double) miss->perigo / (heroi->paciencia + heroi->exp + 1.0);
+            risco = missao->perigo / (heroi->paciencia + heroi->exp + 1);
             if (risco > aleatorio (0, 30))
-                insere_lef (mundo, 8, agora, heroi->id, base->id, miss->id, 0);
+                insere_lef (mundo, 8, tempoatual, heroi->id, base->id, missao->id, 0);
             else
                 heroi->exp++;
         }
     }
     else
     {
-        printf ("%6d: MISSAO %d IMPOSSIVEL\n", agora, miss->id);
-        insere_lef (mundo, 9, agora + 24 * 60, 0, 0, miss->id, 0);
+        printf ("%6d: MISSAO %d IMPOSSIVEL\n", tempoatual, missao->id);
+        insere_lef (mundo, 9, tempoatual + 24 * 60, 0, 0, missao->id, 0);
     }
 }
 
@@ -300,7 +300,7 @@ void invade (struct mundo_t *mundo, struct evento_t *ev)
     struct invasao_t *invasao = mundo->invasoes[ev->invasao];
     struct base_t *base = mundo->bases[ev->base];
     struct heroi_t *heroi;
-    int agora = mundo->relogio;
+    int tempoatual = mundo->relogio;
     int primeiro = 1;
 
     /*invasao em base inativa e ignorada*/
@@ -309,8 +309,8 @@ void invade (struct mundo_t *mundo, struct evento_t *ev)
     
     mundo->invasoes_realizadas++;
 
-    printf ("%6d: INVADE   BASE %d   INVADE %d\n", agora, base->id, invasao->id);
-    printf ("%6d: INVADE %d BASE %d HEROIS INATIVOS [", agora, invasao->id, base->id);
+    printf ("%6d: INVADE   BASE %d   INVADE %d\n", tempoatual, base->id, invasao->id);
+    printf ("%6d: INVADE %d BASE %d HEROIS INATIVOS [", tempoatual, invasao->id, base->id);
 
     for (int id = 0; id < n_herois; id++)
     {
@@ -322,18 +322,18 @@ void invade (struct mundo_t *mundo, struct evento_t *ev)
         primeiro = 0;
 
         heroi->estado = 0;
-        insere_lef (mundo, 11, agora + invasao->tpheroi, heroi->id, 0, 0, 0);
+        insere_lef (mundo, 11, tempoatual + invasao->tpheroi, heroi->id, 0, 0, 0);
 
-        /*cancela a saida (e a entrada, se ainda nao aconteceu) e manda o heroi sair agora*/
+        /*cancela a saida (e a entrada, se ainda nao aconteceu) e manda o heroi sair tempoatual*/
         remove_lef (mundo, 6, heroi->id);
         remove_lef (mundo, 5, heroi->id);
-        insere_lef (mundo, 6, agora, heroi->id, base->id, 0, 0);
+        insere_lef (mundo, 6, tempoatual, heroi->id, base->id, 0, 0);
     }
     printf ("]\n");
 
     base->estado = 0;
-    insere_lef (mundo, 12, agora + invasao->tpbase, 0, base->id, 0, 0);
-    printf ("%6d: INVADE %d BASE %d INATIVA\n", agora, invasao->id, base->id);
+    insere_lef (mundo, 12, tempoatual + invasao->tpbase, 0, base->id, 0, 0);
+    printf ("%6d: INVADE %d BASE %d INATIVA\n", tempoatual, invasao->id, base->id);
 }
 
 void recupera_heroi (struct mundo_t *mundo, struct evento_t *ev)
@@ -367,7 +367,7 @@ void fim (struct mundo_t *mundo)
         cjto_imprime (heroi->habilidades);
         printf (" ]\n");
     }
-    printf ("\n");
+    printf (" ]\n");
 
     for (int i = 0; i < n_bases; i++)
     {
@@ -375,7 +375,7 @@ void fim (struct mundo_t *mundo)
         printf ("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n",
                 base->id, base->lotacao, base->fila_max, base->missoes);
     }
-    printf ("\n");
+    printf (" ]\n");
 
     /*so entram na conta as missoes que foram tentadas pelo menos uma vez*/
     for (int i = 0; i < n_missoes; i++)

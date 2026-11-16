@@ -35,7 +35,7 @@ int distancia (struct posicao_t a, struct posicao_t b)
 {
     double dx = a.x - b.x;
     double dy = a.y - b.y;
-    return ((int) sqrt (dx*dx + dy*dy));
+    return (sqrt (dx*dx + dy*dy));
 }
 
 void remove_lef (struct mundo_t *mundo, int tipo, int heroi)
