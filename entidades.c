@@ -160,6 +160,7 @@ struct mundo_t *criamundo ()
         mundo->qtndinvasoes++;
     }
     
+    /*cria lista de eventos futuros. inicialmente vazia*/
     mundo->lef = fprio_cria();
     if (!mundo->lef)
     {

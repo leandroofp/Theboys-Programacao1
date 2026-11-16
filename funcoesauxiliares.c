@@ -44,24 +44,21 @@ void remove_lef (struct mundo_t *mundo, int tipo, int heroi)
     struct fpnodo_t *aux = mundo->lef->prim;
     struct fpnodo_t *remover;
     struct evento_t *ev;
-    int doheroi;
 
     while (aux)
     {
         ev = aux->item;
 
-        /*so os tipos 1,2,3,5,6,7,8 e 11 carregam um heroi de verdade no campo heroi.
-        os outros (avisa, missao, invade...) tem 0 nesse campo*/
-        doheroi = (aux->tipo >= 1 && aux->tipo <= 8 && aux->tipo != 4) || aux->tipo == 11;
-
-        if (doheroi && ev->heroi == heroi && (!tipo || aux->tipo == tipo))
+        if (ev->heroi == heroi && (!tipo || aux->tipo == tipo)) //se o evento e do heroi, e é do tipo q foi passado ou tipo =0, remove
         {
             remover = aux;
             aux = aux->prox;
+            /*se tem anterior, ele agora vai apontar pro proximo do removido, se nao, o proximo do removido passa a ser o primeiro*/
             if (ant)
                 ant->prox = aux;
             else
                 mundo->lef->prim = aux;
+            // se for remover o ultimo evento da fila, o anteroir dele passa a ser o ultimo
             if (remover == mundo->lef->fim)
                 mundo->lef->fim = ant;
             mundo->lef->num--;

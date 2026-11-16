@@ -16,7 +16,7 @@ void simulamundo(struct mundo_t *mundo)
 
     while (!final)
     {
-        ev = fprio_retira(mundo->lef, &tipo, &tempo);
+        ev = fprio_retira(mundo->lef, &tipo, &tempo); //retira da lef o evento que deve ser executado no tempo atual
         if (!ev)
             return;
         mundo->relogio = tempo;

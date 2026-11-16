@@ -53,24 +53,26 @@ struct invasao_t
     int tpbase; //tempo de penalidade depois da base ser destruida
     int tpheroi; //tempo de penalidade depois da heroi ser destruida
 };
+
 struct mundo_t
 {
    int qtndherois;
-   struct heroi_t *herois[n_herois];
+   struct heroi_t *herois[n_herois]; //vetor contendo todos os herois do mundo
    int qtndbases;
-   struct base_t *bases[n_bases];
+   struct base_t *bases[n_bases]; //vetor contendo todas as bases do mundo
    int qtndmissoes;
-   struct missao_t *missoes[n_missoes];
+   struct missao_t *missoes[n_missoes]; //vetor contendo todas as missoes do mundo
    int qtndinvasoes;
-   struct invasao_t *invasoes[n_invasoes];
+   struct invasao_t *invasoes[n_invasoes]; //vetor contendo todas as invasoes do mundo
    int qtndhabilidades;
-   struct posicao_t tam_mundo;
-   int relogio;
-   struct fprio_t *lef; //lista de eventos futuros
+   struct posicao_t tam_mundo;     //dimensoes do mapa
+   int relogio;                 
+   struct fprio_t *lef;            //lista de eventos futuros
+   // contadores usados nas estatisticas finais
    int eventos_tratados;
-    int missoes_cumpridas;
-    int invasoes_realizadas;
-    int mortes;
+   int missoes_cumpridas;
+   int invasoes_realizadas;
+   int mortes;
 };
 
 /*função responsável por inicializar o herói.
